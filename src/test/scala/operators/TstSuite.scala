@@ -2,6 +2,22 @@ package operators
 
 import org.scalatest.FunSuite
 
+/**
+ * First character of a method defines the precedence:
+ * {{{
+ * all other special characters
+ * / %
+ * + -
+ * :
+ * = !
+ * < >
+ * &
+ * ^
+ * |
+ * all letters
+ * all assignment operators
+ * }}}
+ */
 class TstSuite extends FunSuite {
 
   test("+++") {
@@ -19,8 +35,13 @@ class TstSuite extends FunSuite {
     assert(result.s === "((a***b)***c)")
   }
 
-  test("operator precedence") {
+  test("* has higher precedence that +") {
     val result = Tst("a") +++ Tst("b") *** Tst("c")
     assert(result.s === "(a+++(b***c))")
+  }
+
+  test("other special characters have higher precedence that *") {
+    val result = Tst("a") *** Tst("b") ### Tst("c")
+    assert(result.s === "(a***(b###c))")
   }
 }
